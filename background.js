@@ -9,8 +9,16 @@ let tabHashmap = new Map();
  * Setup on extension init.
  */
 
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.runtime.openOptionsPage();
+chrome.runtime.onInstalled.addListener(function (details) {
+  // Fires on browser upgrades too (reason "browser_update") — only greet real installs
+  if (details.reason !== "install")
+    return;
+
+  // Skip the greeting when settings are already provisioned externally
+  chrome.storage.local.get(['server'], function (result) {
+    if (typeof result.server === 'undefined' || result.server.trim() === "")
+      chrome.runtime.openOptionsPage();
+  });
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {

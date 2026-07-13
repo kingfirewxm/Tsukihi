@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(
 
     // Multi-tab download req
     if (request.type == "batchDownload") {
-      chrome.storage.sync.get(['server', 'api', 'categoryID'], function (result) {
+      chrome.storage.local.get(['server', 'api', 'categoryID'], function (result) {
 
         request.tabs?.forEach(tab => {
           sendDownloadRequest(tab, result.server, result.api, result.categoryID);
@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener(
 
     // Single tab download req
     if (request.type == "downloadUrl") {
-      chrome.storage.sync.get(['server', 'api', 'categoryID'], function (result) {
+      chrome.storage.local.get(['server', 'api', 'categoryID'], function (result) {
         sendDownloadRequest(request.tab, result.server, result.api, result.categoryID);
       });
     }
@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener(
 function onNewUrl(tab, bypassRegexes = false) {
   // If the tab already has a browserAction, we do nothing
   if (!tabHashmap.has(tab.id))
-    chrome.storage.sync.get(['server', 'api', 'supportedURLs'], function (result) {
+    chrome.storage.local.get(['server', 'api', 'supportedURLs'], function (result) {
       if (typeof result.server !== 'undefined' && result.server.trim() !== "") // check for undefined
         if (bypassRegexes || isUrlSupported(tab, result.supportedURLs))
           checkUrl(result.server.trim(), result.api, tab);
@@ -229,7 +229,7 @@ function handleDownloadResult(tab, data) {
     showNotification(`Download of ${tab.url} complete!`, 
       `File has been saved to your server and given the ID ${data.id}`);
 
-    chrome.storage.sync.get(['closeOnDL'], function (result) {
+    chrome.storage.local.get(['closeOnDL'], function (result) {
         if (result.closeOnDL) 
           chrome.tabs.remove(tab.id);
     });

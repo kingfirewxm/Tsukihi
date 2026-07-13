@@ -33,7 +33,7 @@ document.getElementById('downloadRight').onclick = () =>
   });
 
 
-document.getElementById('allDownloads').onclick = () => chrome.storage.sync.get(['server'], function (result) {
+document.getElementById('allDownloads').onclick = () => chrome.storage.local.get(['server'], function (result) {
   if (typeof result.server !== 'undefined' && result.server.trim() !== "") // check for undefined
     chrome.tabs.create({
       url: `${result.server}/minion/jobs`
@@ -63,7 +63,7 @@ function updatePopup(dataFromBackground) {
         document.getElementById('statusMsg').style = "color:green"
         document.getElementById('downloadUrl').disabled = true;
 
-        chrome.storage.sync.get(['server'], function (result) {
+        chrome.storage.local.get(['server'], function (result) {
           safeHtmlInject(document.getElementById('statusDetail'),
             `<span>(id: <a href="${result.server}/reader?id=${dataFromBackground.arcId}" target= "_blank">
                   ${dataFromBackground.arcId}

@@ -1,6 +1,6 @@
 {
   "name": "Tsukihi",
-  "version": "1.2",
+  "version": "1.2.1",
   "description": "Send URLs to your LANraragi server for downloading! 🐦",
   "permissions": [
     "activeTab",
@@ -11,7 +11,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "tsukihi@lanraragi.extension",
+      "id": "tsukihi@kingfirewxm.github.io",
       "strict_min_version": "57.0"
     }
   },

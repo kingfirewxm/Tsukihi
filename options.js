@@ -18,13 +18,18 @@ function updateSettings() {
 
   let status = document.getElementById('statusMsg');
 
-  chrome.storage.sync.set({
+  let settings = {
     server: server.value,
     api: key.value,
     categoryID: catid.value,
-    supportedURLs: supportedUrls,
     closeOnDL: closecheckbox.checked
-  }, function () {
+  };
+
+  // Don't clobber the stored regex list when the server couldn't be reached
+  if (supportedUrls.length > 0)
+    settings.supportedURLs = supportedUrls;
+
+  chrome.storage.local.set(settings, function () {
     status.textContent = "👌 Saved!"
   });
 
@@ -118,7 +123,7 @@ button = document.getElementById('category');
 button.addEventListener('change', updateCategoryDetails);
 
 // Prefill fields with settings
-chrome.storage.sync.get(['server', 'api', 'categoryID', 'closeOnDL'], function (result) {
+chrome.storage.local.get(['server', 'api', 'categoryID', 'closeOnDL'], function (result) {
   document.getElementById('server').value = result.server ?? "";
   document.getElementById('key').value = result.api ?? "";
   document.getElementById('catid').value = result.categoryID ?? "";
